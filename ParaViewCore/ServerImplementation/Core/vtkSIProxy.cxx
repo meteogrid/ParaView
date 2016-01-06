@@ -303,7 +303,7 @@ bool vtkSIProxy::CreateVTKObjects(vtkSMMessage* message)
   if (className && className[0])
     {
     this->SetVTKClassName(className);
-    vtkObjectBase* obj = this->Interpreter->NewInstance(className);
+    vtkObjectBase* obj = this->NewVTKObject(className);
     if (!obj)
       {
       vtkErrorMacro("Failed to create " << className
@@ -591,9 +591,17 @@ void vtkSIProxy::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
 }
+
 //----------------------------------------------------------------------------
 void vtkSIProxy::AboutToDelete()
 {
   // Remove all proxy/input property that still old other SIProxy reference...
   this->Internals->ClearDependencies();
+}
+
+
+//----------------------------------------------------------------------------
+vtkObjectBase* vtkSIProxy::NewVTKObject(const char* className)
+{
+  return this->Interpreter->NewInstance(className);
 }

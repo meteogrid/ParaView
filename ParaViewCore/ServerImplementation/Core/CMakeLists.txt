@@ -62,6 +62,11 @@ set (Module_SRCS
   vtkSMMessage.cxx
 )
 
+if (PARAVIEW_ENABLE_PYTHON)
+  list(APPEND Module_SRCS
+    vtkSIPythonSourceProxy.cxx)
+endif()
+
 set_source_files_properties(
   vtkSMMessage
   WRAP_EXCLUDE)

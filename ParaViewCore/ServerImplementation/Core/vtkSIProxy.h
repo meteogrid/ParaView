@@ -105,6 +105,11 @@ protected:
   ~vtkSIProxy();
 
   // Description:
+  // Create an instance of the class specified. Default implementation uses
+  // this->Interpreter->NewInstance().
+  virtual vtkObjectBase* NewVTKObject(const char* className);
+
+  // Description:
   // Returns the subproxy helper for the subproxy with the given name, if any.
   vtkSIProxy* GetSubSIProxy(const char* name);
 
