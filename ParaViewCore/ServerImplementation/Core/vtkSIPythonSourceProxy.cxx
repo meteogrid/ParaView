@@ -45,11 +45,24 @@ vtkSIPythonSourceProxy::~vtkSIPythonSourceProxy()
 }
 
 //----------------------------------------------------------------------------
+class vtkPythonScopeGilEnsurer
+{
+public:
+   vtkPythonScopeGilEnsurer() : GilState(PyGILState_Ensure()) {}
+   ~vtkPythonScopeGilEnsurer()
+  {
+    PyGILState_Release(GilState);
+  }
+private:
+  PyGILState_STATE GilState;
+};
+
+//----------------------------------------------------------------------------
 vtkObjectBase* vtkSIPythonSourceProxy::NewVTKObject(const char* className)
 {
   vtkPythonInterpreter::Initialize();
   std::string module = vtksys::SystemTools::GetFilenameWithoutLastExtension(className);
-  std::string classname = vtksys::SystemTools::GetFilenameLastExtension(classname);
+  std::string classname = vtksys::SystemTools::GetFilenameLastExtension(className);
   // remove the leading ".".
   classname.erase(classname.begin());
 
